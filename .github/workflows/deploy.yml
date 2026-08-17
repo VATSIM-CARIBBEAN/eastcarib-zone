@@ -1,0 +1,35 @@
+name: Deploy to production
+
+on:
+  push:
+    branches: [main]
+  # Allows re-running a deploy by hand from the Actions tab.
+  workflow_dispatch:
+
+# Overlapping pushes queue behind the running deploy instead of racing it.
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy eastcarib.vatcar.net
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull and deploy on server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          # Namecheap shared hosting SSH port.
+          port: 21098
+          command_timeout: 15m
+          # The git update runs inline (not in deploy.sh) so that changes to
+          # deploy.sh itself take effect in the same run that ships them.
+          script: |
+            set -e
+            cd ~/repositories/eastcarib-zone
+            git fetch origin main
+            git reset --hard origin/main
+            bash scripts/deploy.sh

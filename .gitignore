@@ -55,3 +55,8 @@ Thumbs.db
 # -----------------------------------------------   
 *.sql
 *.sql.gz
+
+# -----------------------------------------------
+# Local-only deployment notes (kept out of the public repo)
+# -----------------------------------------------
+/docs/DEPLOYMENT.md
