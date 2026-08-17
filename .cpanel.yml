@@ -1,4 +1,8 @@
 ---
+# Deployment is handled by GitHub Actions over SSH — see
+# .github/workflows/deploy.yml. vendor/ is committed, so no Composer step is
+# needed on the server. This file is kept as a no-op so an accidental deploy
+# from cPanel's Git Version Control UI does nothing.
 deployment:
   tasks:
-    - /usr/local/bin/composer install --no-dev --optimize-autoloader
+    - /bin/true
